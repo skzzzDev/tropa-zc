@@ -8,10 +8,6 @@
  - ⁠Login Privado para Gerentes e Líders.
  - Setor de busca, apenas ***ESTÉTICA!*** pois não tem setores ou elementos para a realização busca.
 
-***Página de Cadastro (Farms, Drogas, Vendas)***
- - Quando for inserir o ***DINHEIRO TOTAL DO BÁU*** adicione o valor SUJO.
-
-   
 ## Autor
 
 - [@skzzzDev](https://github.com/skzzzDev)

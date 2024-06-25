@@ -12,7 +12,7 @@
  - Quando for inserir o ***DINHEIRO TOTAL DO BÁU*** adicione o valor SUJO.
 
    
-## Autore
+## Autor
 
 - [@skzzzDev](https://github.com/skzzzDev)
 

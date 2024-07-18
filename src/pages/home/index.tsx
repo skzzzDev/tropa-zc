@@ -32,11 +32,11 @@ export function Home() {
       ) : (
         <div className="flex flex-col items-center">
           <div className="mt-10 sm:flex sm:justify-start">
-            <Template className="w-96 h-64" />
+            <Template />
           </div>
 
           <div className="mt-10 w-full px-4">
-            <UserTable className="w-full" />
+            <UserTable />
           </div>
 
           <Footer />

@@ -74,7 +74,8 @@ const template = () => {
     const options = {
       style: "currency",
       currency: "BRL",
-    };
+    } as Intl.NumberFormatOptions; // Definir o tipo corretamente
+
     return valor.toLocaleString("pt-BR", options);
   };
 

@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { FaEdit, FaRegTrashAlt, FaSave, FaTimes } from "react-icons/fa";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 interface InfosProps {
@@ -28,7 +28,6 @@ export default function UserTable() {
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [novoFarm, setNovoFarm] = useState<string>("");
   const [novaVenda, setNovaVenda] = useState<number>(0);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const infos = collection(db, "tropa-zc");
@@ -78,29 +77,14 @@ export default function UserTable() {
     });
   };
 
-  function notifyDelete() {
-    toast.success("Informações apagadas!", {
-      position: "top-right",
-      autoClose: 15000,
-      theme: "dark",
-    });
-  }
-
   const handleRemoverElemento = async (id: string) => {
     try {
       await deleteDoc(doc(db, "tropa-zc", id));
+      notifyDelete(); // Notificar sucesso após remoção
     } catch (error) {
       console.error("Erro ao remover elemento:", error);
     }
   };
-
-  function notifySucess() {
-    toast.success("Informações editadas!", {
-      position: "top-right",
-      autoClose: 15000,
-      theme: "dark",
-    });
-  }
 
   const handleEditarElemento = async (id: string) => {
     try {
@@ -108,6 +92,7 @@ export default function UserTable() {
         farm: novoFarm,
         vendas: novaVenda,
       });
+      notifySucess(); // Notificar sucesso após edição
       setEditandoId(null);
       setNovoFarm("");
       setNovaVenda(0);
@@ -128,10 +113,40 @@ export default function UserTable() {
     setNovaVenda(0);
   };
 
+  function notifyDelete() {
+    toast.success("Informações apagadas!", {
+      position: "top-right",
+      autoClose: 15000,
+      theme: "dark",
+    });
+  }
+
+  function notifySucess() {
+    toast.success("Informações editadas!", {
+      position: "top-right",
+      autoClose: 15000,
+      theme: "dark",
+    });
+  }
+
+  // UseEffect para controlar o tamanho da janela
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  // Definindo o tamanho inicial da janela
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+
   return (
-    <div
-      className={`overflow-x-auto ${windowWidth > 767 ? "w-1/2 mx-auto" : "w-full"}`}
-    >
+    <div className={`overflow-x-auto ${windowWidth > 767 ? "w-1/2 mx-auto" : "w-full"}`}>
       <div className="bg-white shadow-md rounded my-6 sm:my-0 overflow-x-auto">
         <table className="min-w-full bg-white">
           <thead className="bg-neutral-800 text-white">
@@ -176,10 +191,7 @@ export default function UserTable() {
                   {editandoId === info.id ? (
                     <div className="flex space-x-2">
                       <button
-                        onClick={() => {
-                          notifySucess();
-                          handleEditarElemento(info.id);
-                        }}
+                        onClick={() => handleEditarElemento(info.id)}
                         className="text-black hover:text-gray-900"
                       >
                         <FaSave className="h-5 w-5" />
@@ -194,17 +206,15 @@ export default function UserTable() {
                   ) : (
                     <div className="flex space-x-2">
                       <button
-                        onClick={() =>
-                          iniciarEdicao(info.id, info.farm, info.vendas)
-                        }
+                        onClick={() => iniciarEdicao(info.id, info.farm, info.vendas)}
                         className="text-black hover:text-black"
                       >
                         <FaEdit className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => {
-                          notifyDelete();
                           handleRemoverElemento(info.id);
+                          notifyDelete();
                         }}
                         className="text-black hover:text-black"
                       >
